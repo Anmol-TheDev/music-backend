@@ -37,7 +37,7 @@ func FromYouTube(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("err while getting url from ytdlp", err)
 	}
 
-	result.DownloadURl = append(result.DownloadURl, ytdlp...)
+	result.DownloadURl = append(result.DownloadURl, ytdlp)
 
 	w.Header().Set("Content-Type", "application/json")
 	jsonData, err := json.Marshal(result)
