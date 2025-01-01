@@ -12,15 +12,15 @@ import (
 )
 
 func Youtube(query string) youtube.SearchListResponse {
-	fmt.Println(query,"query name")
 	err := godotenv.Load()
+
 	if err != nil {
 		fmt.Println("err while loading env", err)
 	}
 	ctx := context.Background()
 
 	key := os.Getenv("YOUTUBE_KEY")
-	fmt.Println("key", key)
+
 	service, err := youtube.NewService(ctx, option.WithAPIKey(key))
 	if err != nil {
 		log.Fatalf("Error creating YouTube service: %v", err)

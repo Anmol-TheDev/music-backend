@@ -22,7 +22,8 @@ func FromYouTube(w http.ResponseWriter, r *http.Request) {
 	name := r.URL.Query().Get("name")
 
 	if name == "" {
-		w.WriteHeader(http.StatusBadRequest)
+		http.Error(w, "Bad Request Boys 😁", http.StatusBadRequest)
+		return
 	}
 	// fetching data from youtube
 	fetchedData := utils.Youtube(name)
