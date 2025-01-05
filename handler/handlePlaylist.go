@@ -28,7 +28,7 @@ func HandlePlaylist(w http.ResponseWriter, r *http.Request) {
 
 	jsonData, err := json.Marshal(spotifyData)
 	if err != nil {
-		panic(err)
+		http.Error(w,"server error ",http.StatusInternalServerError)
 	}
 	w.Write(jsonData)
 	w.WriteHeader(http.StatusOK)

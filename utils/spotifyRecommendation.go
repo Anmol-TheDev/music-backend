@@ -7,30 +7,42 @@ import (
 	"github.com/zmb3/spotify"
 )
 
+type Seeds struct {
+	Artists []string
+	Tracks  []string
+	Genres  []string
+}
+
 func Recommendation() {
-	songName := "Shape of You"
-	spotifyClient := Token()
+	client := Token()
+	seedArtists := []spotify.ID{"4NHQUGzhtTLFvgF5SZesLK"}
+	seedTracks := []spotify.ID{"3n3Ppam7vgaVa1iaRUc9Lp"}
+	seedGenres := []string{"pop"}
 
-	result, err := spotifyClient.Search(songName, spotify.SearchTypeTrack)
+	limit := 20
 
+	trackAttributes := spotify.NewTrackAttributes().
+		MaxAcousticness(0.15).
+		TargetDanceability(0.8).
+		MinEnergy(0.5).
+		TargetTempo(120)
+
+	seeds := spotify.Seeds{
+		Artists: seedArtists,
+		Tracks:  seedTracks,
+		Genres:  seedGenres,
+	}
+
+	recommendations, err := client.GetRecommendations(seeds, trackAttributes, &spotify.Options{
+		Limit: &limit,
+	})
 	if err != nil {
-		log.Fatalln("err while getting track ", err)
-
+		log.Printf("Error fetching recommendations: %v", err)
+		return
 	}
 
-	songId := result.Tracks.Tracks[0].ID
-
-	if songId == "" {
-		panic("not able to get songID from spotify")
-	}
-
-	recommendations, err := spotifyClient.GetRecommendations(spotify.Seeds{
-		Tracks: []spotify.ID{songId},
-	}, nil, nil)
-	if err != nil {
-		log.Fatalln("err while getting recommendation", err)
-	}
+	fmt.Println("Recommended Tracks:")
 	for _, track := range recommendations.Tracks {
-		fmt.Printf("- %s by %s\n", track.Name, track.Artists[0].Name)
+		fmt.Println(track.Name, track.URI)
 	}
 }

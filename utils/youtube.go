@@ -2,21 +2,15 @@ package utils
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"google.golang.org/api/option"
 	"google.golang.org/api/youtube/v3"
 )
 
 func Youtube(query string) youtube.SearchListResponse {
-	err := godotenv.Load()
 
-	if err != nil {
-		fmt.Println("err while loading env", err)
-	}
 	ctx := context.Background()
 
 	key := os.Getenv("YOUTUBE_KEY")

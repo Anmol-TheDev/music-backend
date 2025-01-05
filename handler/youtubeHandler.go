@@ -18,16 +18,16 @@ func FromYouTube(w http.ResponseWriter, r *http.Request) {
 
 	var result YoutubeData
 	w.WriteHeader(http.StatusOK)
+
 	// checking is query is right
 	name := r.URL.Query().Get("name")
 
 	if name == "" {
-		http.Error(w, "Bad Request Boys 😁", http.StatusBadRequest)
+		http.Error(w, "Bad Request ", http.StatusBadRequest)
 		return
 	}
 	// fetching data from youtube
 	fetchedData := utils.Youtube(name)
-
 	for _, item := range fetchedData.Items {
 		result.Name = item.Snippet.Title
 		result.Image = item.Snippet.Thumbnails.High.Url
@@ -35,7 +35,8 @@ func FromYouTube(w http.ResponseWriter, r *http.Request) {
 	}
 	ytdlp, err := utils.Ytdlp(result.Url)
 	if err != nil {
-		fmt.Println("err while getting url from ytdlp", err)
+		http.Error(w, "server error", http.StatusInternalServerError)
+		fmt.Println("err getting ytdlp", err)
 	}
 	fmt.Println(ytdlp)
 
