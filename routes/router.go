@@ -10,6 +10,7 @@ func Router() {
 	http.HandleFunc("/playlist", handler.HandlePlaylist)
 	http.HandleFunc("/notfound", handler.FromYouTube)
 	http.HandleFunc("/searchsong",handler.HandleSearch)
+	http.HandleFunc("/homesuggestion",handler.HnadleHomeSuggestion)
 	http.HandleFunc("/auth/register",auth.Register)
 	http.HandleFunc("/auth/login",auth.Login)
 }

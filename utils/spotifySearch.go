@@ -4,11 +4,25 @@ import (
 	"github.com/zmb3/spotify"
 )
 
-func Search(query string) (*spotify.SearchResult, error) {
+func SearchTrack(query string) (*spotify.SearchResult, error) {
+	var Client = Token()
 
-	client := Token()
-
-	search, err := client.Search(query, spotify.SearchTypeTrack)
+	search, err := Client.Search(query, spotify.SearchTypeTrack)
 
 	return search, err
+}
+
+
+func SearchPlaylist(query string)(*spotify.SearchResult,error){
+	var Client = Token()
+	search, err := Client.Search(query, spotify.SearchTypePlaylist)
+
+	return search,err
+}
+
+func SearchArtist(query string)(*spotify.SearchResult,error){
+	var Client = Token()
+	search, err := Client.Search(query, spotify.SearchTypeArtist)
+
+	return search,err
 }

@@ -22,7 +22,7 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp, err := utils.Search(query)
+	resp, err := utils.SearchTrack(query)
 
 	if err != nil {
 		http.Error(w, "server error", http.StatusInternalServerError)
