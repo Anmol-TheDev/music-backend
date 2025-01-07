@@ -2,7 +2,6 @@ package main
 
 import (
 	"fetch-spotify/routes"
-	"fetch-spotify/utils"
 	"fmt"
 	"net/http"
 
@@ -28,7 +27,6 @@ func main() {
 	// for i, url := range downloadURLs {
 	// 	fmt.Printf("%d: %s\n", i+1, url)
 	// }
-	utils.Recommendation()
 	routes.Router()
 	err = http.ListenAndServe(":8000", nil)
 	if err != nil {

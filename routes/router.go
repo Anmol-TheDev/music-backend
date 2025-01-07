@@ -2,11 +2,14 @@ package routes
 
 import (
 	"fetch-spotify/handler"
+	auth "fetch-spotify/handler/Auth"
 	"net/http"
 )
 
 func Router() {
 	http.HandleFunc("/playlist", handler.HandlePlaylist)
 	http.HandleFunc("/notfound", handler.FromYouTube)
-	http.HandleFunc("/suggest",handler.HandleSuggestion)
+	http.HandleFunc("/searchsong",handler.HandleSearch)
+	http.HandleFunc("/auth/register",auth.Register)
+	http.HandleFunc("/auth/login",auth.Login)
 }
