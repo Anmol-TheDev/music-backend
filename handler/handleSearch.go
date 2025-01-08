@@ -20,7 +20,7 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow all origins
+	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:3000")        // Allow all origins
 	w.Header().Set("Access-Control-Allow-Methods", "GET")                         // Allowed methods
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // Allowed headers
 
