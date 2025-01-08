@@ -19,6 +19,11 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")                            // Allow all origins
+	w.Header().Set("Access-Control-Allow-Methods", "GET")                         // Allowed methods
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization") // Allowed headers
+
 	query := r.URL.Query().Get("query")
 	var data searchResult
 	if query == "" {

@@ -18,6 +18,7 @@ func main() {
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("err while loading dotenv")
+		return
 	}
 	// utils.Youtube(os.Getenv("YOUTUBE_KEY"))
 
@@ -32,5 +33,4 @@ func main() {
 	if err != nil {
 		fmt.Println("err while turning on server", err)
 	}
-
 }
