@@ -11,10 +11,14 @@ type track struct {
 	Id   string `json:"id"`
 }
 type searchResult struct {
-	Tracks []track  `json:"tracks"`
+	Tracks []track `json:"tracks"`
 }
 
 func HandleSearch(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
 	query := r.URL.Query().Get("query")
 	var data searchResult
 	if query == "" {

@@ -13,6 +13,11 @@ type Data struct {
 var Array []string
 
 func HandlePlaylist(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	id := r.URL.Query().Get("id")
 	if id == "" {
 		http.Error(w, "id is requied", http.StatusBadRequest)
@@ -28,7 +33,7 @@ func HandlePlaylist(w http.ResponseWriter, r *http.Request) {
 
 	jsonData, err := json.Marshal(spotifyData)
 	if err != nil {
-		http.Error(w,"server error ",http.StatusInternalServerError)
+		http.Error(w, "server error ", http.StatusInternalServerError)
 	}
 	w.Write(jsonData)
 	w.WriteHeader(http.StatusOK)
