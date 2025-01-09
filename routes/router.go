@@ -13,4 +13,5 @@ func Router() {
 	http.HandleFunc("/homesuggestion", handler.HnadleHomeSuggestion)
 	http.HandleFunc("/auth/register", auth.Register)
 	http.HandleFunc("/auth/login", auth.Login)
+	http.HandleFunc("/auth/tokencheck",auth.CheckToken)
 }

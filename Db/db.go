@@ -3,26 +3,26 @@ package db
 import (
 	"context"
 	"fmt"
-	"os"
 
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"cloud.google.com/go/firestore"
+	firebase "firebase.google.com/go"
+
+	"google.golang.org/api/option"
 )
 
-func Db() {
-	db_password := os.Getenv("MONGO_PASSWORD")
-	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI(fmt.Sprintf("mongodb+srv://anmol:%s@anmol.9253c.mongodb.net/?retryWrites=true&w=majority&appName=Anmol",db_password)).SetServerAPIOptions(serverAPI)
-	
-	client, err := mongo.Connect(context.TODO(), opts)
+func Db()(*firestore.Client,error) {
+	opt := option.WithCredentialsFile("/home/anmol/Documents/firebase.json")
+	app, err := firebase.NewApp(context.Background(), nil, opt)
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
-	defer func() {
-		if err = client.Disconnect(context.TODO()); err != nil {
-			panic(err)
-		}
-	}()
+	ctx := context.Background()
+	database,err:=app.Firestore(ctx)
 
-	fmt.Println("Pinged your deployment. You successfully connected to MongoDB!")
+	if err != nil {
+		return nil,err
+	}
+
+	return database,nil
+
 }
