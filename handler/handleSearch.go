@@ -38,7 +38,10 @@ func HandleSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, item := range resp.Tracks.Tracks {
+	for i, item := range resp.Tracks.Tracks {
+		if i == 9 {
+			break
+		}
 		temp := track{
 			Name: item.Name,
 			Id:   string(item.ID),
