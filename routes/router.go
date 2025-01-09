@@ -8,7 +8,7 @@ import (
 
 func Router() {
 	http.HandleFunc("/playlist", handler.HandlePlaylist)
-	http.HandleFunc("/notfound", handler.FromYouTube)
+	http.HandleFunc("/song", handler.FromYouTube)
 	http.HandleFunc("/searchsong", handler.HandleSearch)
 	http.HandleFunc("/homesuggestion", handler.HnadleHomeSuggestion)
 	http.HandleFunc("/auth/register", auth.Register)

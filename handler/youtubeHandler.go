@@ -10,7 +10,7 @@ import (
 type YoutubeData struct {
 	Name        string `json:"name"`
 	Image       string `json:"image"`
-	Url         string `json:"url"`
+	YtUrl         string `json:"yturl"`
 	DownloadURl string `json:"downloadurl"`
 }
 
@@ -36,9 +36,9 @@ func FromYouTube(w http.ResponseWriter, r *http.Request) {
 	for _, item := range fetchedData.Items {
 		result.Name = item.Snippet.Title
 		result.Image = item.Snippet.Thumbnails.High.Url
-		result.Url = fmt.Sprintf("https://www.youtube.com/watch?v=%s", item.Id.VideoId)
+		result.YtUrl = fmt.Sprintf("https://www.youtube.com/watch?v=%s", item.Id.VideoId)
 	}
-	ytdlp, err := utils.Ytdlp(result.Url)
+	ytdlp, err := utils.Ytdlp(result.YtUrl)
 	if err != nil {
 		http.Error(w, "server error", http.StatusInternalServerError)
 		fmt.Println("err getting ytdlp", err)
