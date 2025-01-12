@@ -14,4 +14,5 @@ func Router() {
 	http.HandleFunc("/auth/register", auth.Register)
 	http.HandleFunc("/auth/login", auth.Login)
 	http.HandleFunc("/auth/tokencheck",auth.CheckToken)
+	http.HandleFunc("/auth/logout",auth.Logout)
 }
