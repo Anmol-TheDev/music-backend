@@ -1,0 +1,23 @@
+package modles
+
+import "github.com/zmb3/spotify"
+
+type TrackStr struct {
+	Name        string          `json:"name"`
+	Id          string          `json:"id"`
+	Images      []spotify.Image `json:"images"`
+	Artiest     []string        `json:"artiest"`
+	DownloadUrl string          `json:"downloadurl"`
+}
+
+type PlaylistStr struct {
+	Name   string                 `json:"name"`
+	Id     string                 `json:"id"`
+	Tracks spotify.PlaylistTracks `json:"tracks"`
+	Image  []spotify.Image        `json:"images"`
+}
+
+type RespDataStr struct {
+	Tracks   []TrackStr    `json:"tracks"`
+	Playlist []PlaylistStr `json:"playlists"`
+}

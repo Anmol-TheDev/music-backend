@@ -2,31 +2,10 @@ package handler
 
 import (
 	"encoding/json"
+	"fetch-spotify/modles"
 	"fetch-spotify/utils"
 	"net/http"
-
-	"github.com/zmb3/spotify"
 )
-
-type trackStr struct {
-	Name    string          `json:"name"`
-	Id      string          `json:"id"`
-	Images  []spotify.Image `json:"images"`
-	Views   int64           `json:"views"`
-	Artiest []string        `json:"artiest"`
-}
-
-type playlistStr struct {
-	Name   string                 `json:"name"`
-	Id     string                 `json:"id"`
-	Tracks spotify.PlaylistTracks `json:"tracks"`
-	Image  []spotify.Image        `json:"images"`
-}
-
-type respDataStr struct {
-	Tracks   []trackStr    `json:"tracks"`
-	Playlist []playlistStr `json:"playlists"`
-}
 
 func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 
@@ -46,7 +25,7 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// getting tracks
-	var data respDataStr
+	var data modles.RespDataStr
 
 	trackRes, err := utils.SearchTrack(query)
 
@@ -56,7 +35,7 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, item := range trackRes.Tracks.Tracks {
-		temp := trackStr{
+		temp := modles.TrackStr{
 			Name:   item.Name,
 			Id:     item.ID.String(),
 			Images: item.Album.Images,
@@ -66,6 +45,8 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 		}
 		data.Tracks = append(data.Tracks, temp)
 	}
+
+	// utils.GetTrackfromJio(data.Tracks)
 
 	// getting playlists
 
@@ -77,7 +58,7 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, item := range playlistRes.Playlists.Playlists {
-		tempPlaylist := playlistStr{
+		tempPlaylist := modles.PlaylistStr{
 			Name:   item.Name,
 			Id:     item.ID.String(),
 			Image:  item.Images,
