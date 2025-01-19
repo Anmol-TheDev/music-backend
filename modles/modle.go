@@ -6,7 +6,7 @@ type TrackStr struct {
 	Name        string          `json:"name"`
 	Id          string          `json:"id"`
 	Images      []spotify.Image `json:"images"`
-	Artiest     []string        `json:"artiest"`
+	Artist     []string        `json:"artiest"`
 	DownloadUrl string          `json:"downloadurl"`
 }
 

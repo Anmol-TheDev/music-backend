@@ -41,7 +41,7 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 			Images: item.Album.Images,
 		}
 		for _, value := range item.Artists {
-			temp.Artiest = append(temp.Artiest, value.Name)
+			temp.Artist = append(temp.Artist, value.Name)
 		}
 		data.Tracks = append(data.Tracks, temp)
 	}
