@@ -10,7 +10,7 @@ import (
 type YoutubeData struct {
 	Name        string `json:"name"`
 	Image       string `json:"image"`
-	YtUrl         string `json:"yturl"`
+	YtUrl       string `json:"yturl"`
 	DownloadURl string `json:"downloadurl"`
 }
 
@@ -43,7 +43,6 @@ func FromYouTube(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "server error", http.StatusInternalServerError)
 		fmt.Println("err getting ytdlp", err)
 	}
-	fmt.Println(ytdlp)
 
 	result.DownloadURl = string(ytdlp)
 

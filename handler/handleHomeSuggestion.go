@@ -9,10 +9,11 @@ import (
 )
 
 type trackStr struct {
-	Name   string          `json:"name"`
-	Id     string          `json:"id"`
-	Images []spotify.Image `json:"images"`
-	Views  int64           `json:"views"`
+	Name    string          `json:"name"`
+	Id      string          `json:"id"`
+	Images  []spotify.Image `json:"images"`
+	Views   int64           `json:"views"`
+	Artiest []string        `json:"artiest"`
 }
 
 type playlistStr struct {
@@ -60,8 +61,10 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 			Id:     item.ID.String(),
 			Images: item.Album.Images,
 		}
+		for _, value := range item.Artists {
+			temp.Artiest = append(temp.Artiest, value.Name)
+		}
 		data.Tracks = append(data.Tracks, temp)
-
 	}
 
 	// getting playlists
@@ -74,7 +77,6 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 	}
 
 	for _, item := range playlistRes.Playlists.Playlists {
-
 		tempPlaylist := playlistStr{
 			Name:   item.Name,
 			Id:     item.ID.String(),
