@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fetch-spotify/modles"
 	"fetch-spotify/utils"
+	"fmt"
 	"net/http"
 )
 
@@ -39,6 +40,7 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 			Name:   item.Name,
 			Id:     item.ID.String(),
 			Images: item.Album.Images,
+			Source: "jiosavan",
 		}
 		for _, value := range item.Artists {
 			temp.Artist = append(temp.Artist, value.Name)
@@ -46,7 +48,13 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 		data.Tracks = append(data.Tracks, temp)
 	}
 
-	// utils.GetTrackfromJio(data.Tracks)
+	utils.GetTrackfromJio(&data.Tracks)
+
+	for i, _ := range data.Tracks {
+		if data.Tracks[i].DownloadUrl == "" {
+			data.Tracks[i].Source = "yt"
+		}
+	}
 
 	// getting playlists
 
@@ -74,4 +82,6 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "", http.StatusInternalServerError)
 	}
 	w.Write(jsonData)
+
+	fmt.Println(r.URL, " served!")
 }

@@ -15,6 +15,7 @@ func main() {
 		fmt.Println("err while loading dotenv")
 		return
 	}
+	fmt.Println("Server is Starting!!!")
 	routes.Router()
 	err = http.ListenAndServe(":8000", nil)
 	if err != nil {

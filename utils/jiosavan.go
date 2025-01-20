@@ -29,39 +29,54 @@ type JioSavanData struct {
 	} `json:"data"`
 }
 
-func GetTrackfromJio(tracks []modles.TrackStr) {
-	var resTracks []modles.TrackStr
+func GetTrackfromJio(tracks *[]modles.TrackStr) {
+	// var resTracks []modles.TrackStr
 	var wg sync.WaitGroup
-	wg.Add(len(tracks))
+	wg.Add(len(*tracks))
 
-	for _, track := range tracks {
-		name := track.Name
+	for i := range *tracks {
+		name := (*tracks)[i].Name
 		fullUrl := URL + name + "&limit=1"
 		go func(url string) {
 			defer wg.Done() // Decrement counter when goroutine completes
-			makeRequest(url, &resTracks)
+			temp := makeRequest(url)
+			(*tracks)[i].Id = temp.savanID
+			(*tracks)[i].DownloadUrl = temp.downloadUrl
 		}(fullUrl) // Pass the current url as an argument to avoid closure issues
 	}
-
+	defer wg.Wait()
 }
 
-func makeRequest(url string, restracks *[]modles.TrackStr) {
+type makeRequestStruct struct {
+	// orgID string
+	savanID     string
+	downloadUrl string
+}
+
+func makeRequest(url string) makeRequestStruct {
 
 	res, err := http.Get(url)
 	if err != nil {
 		fmt.Println("error while jio savan ", err)
 	}
+	if res.StatusCode != http.StatusOK {
+		return makeRequestStruct{}
+	}
+
 	defer res.Body.Close()
 	body, err := io.ReadAll(res.Body)
+
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	var resBody JioSavanData
 	err = json.Unmarshal(body, &resBody)
-	var temp modles.TrackStr
-	temp.DownloadUrl = resBody.Data.Results[0].DownloadUrl[4].Url
 	if err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
-	*restracks = append(*restracks, )
+	var temp makeRequestStruct
+	temp.downloadUrl = resBody.Data.Results[0].DownloadUrl[4].Url
+	temp.savanID = resBody.Data.Results[0].Id
+	return temp
 }

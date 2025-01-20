@@ -3,10 +3,11 @@ package modles
 import "github.com/zmb3/spotify"
 
 type TrackStr struct {
-	Name        string          `json:"name"`
 	Id          string          `json:"id"`
+	Name        string          `json:"name"`
 	Images      []spotify.Image `json:"images"`
-	Artist     []string        `json:"artiest"`
+	Artist      []string        `json:"artist"`
+	Source      string          `json:"source"`
 	DownloadUrl string          `json:"downloadurl"`
 }
 

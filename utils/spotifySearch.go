@@ -6,7 +6,6 @@ import (
 
 func SearchTrack(query string) (*spotify.SearchResult, error) {
 	var Client = Token()
-
 	search, err := Client.Search(query, spotify.SearchTypeTrack)
 
 	return search, err
