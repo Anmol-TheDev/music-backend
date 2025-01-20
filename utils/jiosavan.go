@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"sync"
 )
 
@@ -20,11 +21,11 @@ type JioSavanData struct {
 				Quality string `json:"quality"`
 				Url     string `json:"url"`
 			} `json:"downloadUrl"`
-			Arists struct {
+			Artists struct {
 				Primary []struct {
 					Name string `json:"name"`
 				}
-			}
+			} `json:"artists"`
 		} `json:"results"`
 	} `json:"data"`
 }
@@ -38,10 +39,13 @@ func GetTrackfromJio(tracks *[]modles.TrackStr) {
 		name := (*tracks)[i].Name
 		fullUrl := URL + name + "&limit=1"
 		go func(url string) {
+			artistName := (*tracks)[i].Artist[0]
 			defer wg.Done() // Decrement counter when goroutine completes
 			temp := makeRequest(url)
-			(*tracks)[i].Id = temp.savanID
-			(*tracks)[i].DownloadUrl = temp.downloadUrl
+			if strings.EqualFold(artistName, temp.artist) {
+				(*tracks)[i].Id = temp.savanID
+				(*tracks)[i].DownloadUrl = temp.downloadUrl
+			}
 		}(fullUrl) // Pass the current url as an argument to avoid closure issues
 	}
 	defer wg.Wait()
@@ -51,6 +55,7 @@ type makeRequestStruct struct {
 	// orgID string
 	savanID     string
 	downloadUrl string
+	artist      string
 }
 
 func makeRequest(url string) makeRequestStruct {
@@ -78,5 +83,9 @@ func makeRequest(url string) makeRequestStruct {
 	var temp makeRequestStruct
 	temp.downloadUrl = resBody.Data.Results[0].DownloadUrl[4].Url
 	temp.savanID = resBody.Data.Results[0].Id
+
+	if len(resBody.Data.Results[0].Artists.Primary) > 0 {
+		temp.artist = resBody.Data.Results[0].Artists.Primary[0].Name
+	}
 	return temp
 }

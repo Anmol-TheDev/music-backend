@@ -50,7 +50,7 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 
 	utils.GetTrackfromJio(&data.Tracks)
 
-	for i, _ := range data.Tracks {
+	for i := range data.Tracks {
 		if data.Tracks[i].DownloadUrl == "" {
 			data.Tracks[i].Source = "yt"
 		}
@@ -65,12 +65,14 @@ func HnadleHomeSuggestion(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, item := range playlistRes.Playlists.Playlists {
+	for i, item := range playlistRes.Playlists.Playlists {
+		if i == 10 {
+			break
+		}
 		tempPlaylist := modles.PlaylistStr{
 			Name:   item.Name,
 			Id:     item.ID.String(),
 			Image:  item.Images,
-			Tracks: item.Tracks,
 		}
 		data.Playlist = append(data.Playlist, tempPlaylist)
 	}

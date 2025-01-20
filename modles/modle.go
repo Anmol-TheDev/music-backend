@@ -14,8 +14,8 @@ type TrackStr struct {
 type PlaylistStr struct {
 	Name   string                 `json:"name"`
 	Id     string                 `json:"id"`
-	Tracks spotify.PlaylistTracks `json:"tracks"`
 	Image  []spotify.Image        `json:"images"`
+	Tracks []TrackStr			 `json:"tracks"`
 }
 
 type RespDataStr struct {

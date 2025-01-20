@@ -2,20 +2,18 @@ package handler
 
 import (
 	"encoding/json"
+	"fetch-spotify/modles"
 	"fetch-spotify/utils"
 	"net/http"
 
 	"github.com/zmb3/spotify"
 )
 
-type Track struct {
-	Name    string        `json:"name"`
-	SptfyID string   `json:"id"`
-	Images  spotify.Image `json:"images"`
-}
+
 type sptfyPlaylist struct {
 	Name   string  `json:"name"`
-	Tracks []Track `json:"tracks"`
+	Tracks []modles.TrackStr `json:"tracks"`
+	Images []spotify.Image `json:"images"`
 }
 
 var Array []string
@@ -34,8 +32,8 @@ func HandlePlaylist(w http.ResponseWriter, r *http.Request) {
 
 	spotifyClient := utils.Token()
 	playlistId := spotify.ID(id)
-	playlistTracks, err := spotifyClient.GetPlaylistTracks(playlistId)
-	// playlistRes, err := spotifyClient.GetPlaylist(playlistId)
+	playlistTracks, _ := spotifyClient.GetPlaylistTracks(playlistId)
+	playlistRes, err := spotifyClient.GetPlaylist(playlistId)
 	if err != nil {
 		http.Error(w, "", http.StatusInternalServerError)
 		return
@@ -43,15 +41,19 @@ func HandlePlaylist(w http.ResponseWriter, r *http.Request) {
 
 	var playlist sptfyPlaylist
 
+	playlist.Name = playlistRes.Name
+	playlist.Images = playlistRes.Images
+
 	for _, item := range playlistTracks.Tracks {
 
-		var temp track
+		var temp modles.TrackStr
 		temp.Name = item.Track.Name
 		temp.Id = item.Track.ID.String()
-
-		playlist.Tracks = append(playlist.Tracks)
+		playlist.Tracks = append(playlist.Tracks,temp)
 
 	}
+
+	utils.GetTrackfromJio(&playlist.Tracks)
 
 	w.Header().Set("Content-Type", "application/json")
 

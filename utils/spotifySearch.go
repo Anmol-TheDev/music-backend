@@ -24,3 +24,17 @@ func SearchArtist(query string) (*spotify.SearchResult, error) {
 
 	return search, err
 }
+
+func GetTrackFromSpotifyId(id string) (*spotify.FullTrack, error) {
+	var Client = Token()
+	track, err := Client.GetTrack(spotify.ID(id))
+
+	return track,err
+}
+
+func GetPlaylistFromSpotifyId(id string) (*spotify.PlaylistTrackPage, error) {
+	var Client = Token()
+	playlist, err := Client.GetPlaylistTracks(spotify.ID(id))
+
+	return playlist,err
+}
