@@ -42,7 +42,8 @@ func GetTrackfromJio(tracks *[]modles.TrackStr) {
 			artistName := (*tracks)[i].Artist[0]
 			defer wg.Done() // Decrement counter when goroutine completes
 			temp := makeRequest(url)
-			if strings.EqualFold(artistName, temp.artist) {
+
+			if temp != nil && strings.EqualFold(artistName, temp.artist) {
 				(*tracks)[i].Id = temp.savanID
 				(*tracks)[i].DownloadUrl = temp.downloadUrl
 			}
@@ -58,14 +59,14 @@ type makeRequestStruct struct {
 	artist      string
 }
 
-func makeRequest(url string) makeRequestStruct {
+func makeRequest(url string) *makeRequestStruct {
 
 	res, err := http.Get(url)
 	if err != nil {
 		fmt.Println("error while jio savan ", err)
 	}
 	if res.StatusCode != http.StatusOK {
-		return makeRequestStruct{}
+		return nil
 	}
 
 	defer res.Body.Close()
@@ -87,5 +88,5 @@ func makeRequest(url string) makeRequestStruct {
 	if len(resBody.Data.Results[0].Artists.Primary) > 0 {
 		temp.artist = resBody.Data.Results[0].Artists.Primary[0].Name
 	}
-	return temp
+	return &temp
 }
