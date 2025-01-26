@@ -48,20 +48,21 @@ func FromYouTube(w http.ResponseWriter, r *http.Request) {
 		result.YtUrl = fmt.Sprintf("https://www.youtube.com/watch?v=%s", item.Id.VideoId)
 		result.YTID = item.Id.VideoId
 	}
-	// ytURL := ytcRC(result.YTID)
-	// if ytURL == "" {
-	// 	http.Error(w, "server error", http.StatusInternalServerError)
-	// 	fmt.Println("err getting ytdlp")
-	// 	return
-	// }
-	ytdlp, err := utils.Ytdlp(result.YtUrl)
-	if err != nil {
+	ytURL := ytcRC(result.YTID)
+	if ytURL == "" {
 		http.Error(w, "server error", http.StatusInternalServerError)
-		fmt.Println("err getting ytdlp", err)
+		fmt.Println("err getting ytdlp")
 		return
 	}
+	// ytdlp, err := utils.Ytdlp(result.YtUrl)
+	// if err != nil {
+	// 	http.Error(w, "server error", http.StatusInternalServerError)
+	// 	fmt.Println("err getting ytdlp", err)
+	// 	return
+	// }
 
-	result.DownloadURl = ytdlp
+	result.DownloadURl = ytURL
+	fmt.Println(ytURL)
 
 	w.Header().Set("Content-Type", "application/json")
 	jsonData, err := json.Marshal(result)
@@ -83,7 +84,7 @@ func ytcRC(id string) string {
 		chromedp.Navigate("https://ytc.re/button/mp3/"+id),
 		chromedp.WaitVisible(`#down`, chromedp.ByID), // Wait for the button
 		chromedp.Click(`#down`, chromedp.ByID),       // Click the button
-		chromedp.Sleep(4400*time.Millisecond),
+		chromedp.Sleep(1500*time.Millisecond),
 		chromedp.AttributesAll(`#down`, &data), // Get the button attributes
 	)
 	if err != nil {
